@@ -1,0 +1,28 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/docker-images-repo/trigger-helloworld:$COMMIT_SHA', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/docker-images-repo/trigger-helloworld:$COMMIT_SHA']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+    - 'beta'
+    - 'run'
+    - 'deploy'
+    - 'svc-helloworld'
+    - '--image'
+    - 'us-central1-docker.pkg.dev/$PROJECT_ID/docker-images-repo/trigger-helloworld:$COMMIT_SHA'
+    - '--region'
+    - 'us-east1'
+    - '--platform'
+    - 'managed'
+    - '--min-instances'
+    - '0'
+    - '--max-instances'
+    - '1'
+    - '--allow-unauthenticated'
+images:
+- 'us-central1-docker.pkg.dev/$PROJECT_ID/docker-images-repo/trigger-helloworld'
