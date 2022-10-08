@@ -2,7 +2,7 @@ steps:
 # Build the container image
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/docker-images-repo/trigger-helloworld:$COMMIT_SHA', '.']
-# Push the container image to Container Registry
+# Push the container image to Artifact Registry
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/docker-images-repo/trigger-helloworld:$COMMIT_SHA']
 # Deploy container image to Cloud Run
